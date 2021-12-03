@@ -1,7 +1,5 @@
 import Head from 'next/head'
 import Image from 'next/image'
-import Link from 'next/link'
-import Profile from '../components/Profile'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
@@ -22,13 +20,6 @@ export default function Home() {
           Get started by editing{' '}
           <code className={styles.code}>pages/index.js</code>
         </p>
-
-        <Link href="/game/splash">Create Your Own Festival</Link>
-        <a href="/api/auth/login">Login</a>
-
-        <a href="/api/auth/logout">Logout</a>
-
-        <Profile />
 
         <div className={styles.grid}>
           <a href="https://nextjs.org/docs" className={styles.card}>
