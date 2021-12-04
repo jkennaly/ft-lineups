@@ -1,7 +1,7 @@
 {
   "name": "ft-sched-game",
   "description": "scheduling music festivals for fun and profit",
-  "version": ".0.1",
+  "version": "0.0.1",
   "engines": {
     "node": "14.x"
   },
