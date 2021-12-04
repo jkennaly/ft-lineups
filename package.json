@@ -3,7 +3,7 @@
   "description": "scheduling music festivals for fun and profit",
   "version": ".0.1",
   "engines": {
-    "node": "15.x"
+    "node": "14.x"
   },
   "private": true,
   "scripts": {
