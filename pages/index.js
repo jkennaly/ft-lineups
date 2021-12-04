@@ -22,9 +22,9 @@ export default function Home() {
           <code className={styles.code}>pages/index.js</code>
         </p>
 
-        <a href="/api/auth/login">Login</a> // eslint-disable-line no-eval
+        <a href="/api/auth/login">Login</a>
 
-        <a href="/api/auth/logout">Logout</a> // eslint-disable-line no-eval
+        <a href="/api/auth/logout">Logout</a>
 
         <Profile />
 
