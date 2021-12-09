@@ -1,14 +1,16 @@
 import mysql from 'mysql2/promise'
 
 
-const db = mysql.createConnection(process.env.JAWSDB_URL + '?connectionLimit=2&debug=false')
 
-export async function excuteQuery({ query, values }) {
+export async function executeQuery({ query, params }) {
+const db = await mysql.createConnection(process.env.JAWSDB_URL + '?connectionLimit=1&debug=false')
   try {
-    const results = await db.query(query, values);
+    const results = await db.query(query, params)
     await db.end();
     return results;
   } catch (error) {
-    return { error };
+  	console.error(error)
+  	console.log('query', query, params)
+    throw error
   }
 }

@@ -60,13 +60,13 @@ const Input = styled.input`
   width: 200px;
   margin-left: 15px;
 `;
-export const MainButton = styled.button`
-`;
-function ModalContainer({ setOpen, data, setData, content }) {
+function ModalContainer({ setOpen, data, setData, content, withSubmit, title, submission }) {
   function close() {
     setOpen(false);
   }
-  function submit() {
+  function submit(e) {
+  	e.preventDefault()
+  	submission[0](submission[1])
     close();
   }
   
@@ -74,32 +74,35 @@ function ModalContainer({ setOpen, data, setData, content }) {
     <>
       <ModalShadow onClick={close} />
       <Modal>
-        <ModalBanner>Edit Clicks</ModalBanner>
+        <ModalBanner>{title}</ModalBanner>
         <ModalContent>
           {content}
         </ModalContent>
-        <ModalFooter>
+        {withSubmit ? <ModalFooter>
           <ConfirmButton onClick={submit}> Submit </ConfirmButton>
-        </ModalFooter>
+        </ModalFooter> : ''}
       </Modal>
     </>,
     document.getElementById('app-modal'),
   );
 }
 export function ModalPopper(props) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(!props.forceClose);
+
   return (
     <div>
       <button
         onClick={() => {
+          props.allowOpen()
           setOpen(true);
+
         }}
         type="button"
         className={props.buttonClasses}
       >
         {props.buttonContent}
       </button>
-      {open && (
+      {open && !props.forceClose && (
         <ModalContainer
           {...props}
           setOpen={setOpen}

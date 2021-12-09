@@ -1,5 +1,7 @@
-// pages/api/user.js
+// pages/api/festigram/user.js
+
 import { getAccessToken, withApiAuthRequired } from '@auth0/nextjs-auth0';
+
 
 function handleResponseStatusAndContentType(response) {
   const contentType = response.headers.get('content-type');
@@ -14,14 +16,16 @@ function handleResponseStatusAndContentType(response) {
   else throw new Error(`Unsupported response content-type: ${contentType}`);
 }
 
-
-export default withApiAuthRequired(async function userProfile(req, res) {
+export async function userProfile(req, res, local) {
   // If your Access Token is expired and you have a Refresh Token
   // `getAccessToken` will fetch you a new one using the `refresh_token` grant
   const { accessToken } = await getAccessToken(req, res, {
     scopes: ['openid', 'profile', 'email']
   });
+  //console.log('local: ', local)
   //console.log('Recvd access token: ', accessToken)
+  if(!accessToken && !local) return res.status(200).send('Not Looged In')
+  if(!accessToken) throw new Error('Not Looged In')
   const response = await fetch('https://festigram.app/api/Profiles/getUserId', {
     headers: {
       Authorization: `Bearer ${accessToken}`
@@ -46,10 +50,12 @@ export default withApiAuthRequired(async function userProfile(req, res) {
   	//console.log('recovered userdata', user)
   	return user
   })
-  	.then(user => res.status(200).json(user))
+  	.then(user => !local && res.status(200).json(user) || user)
 	.catch(error => {
-	  console.error(error);
-	  return error;
-	  res.status(500).send('No user found')
+	  console.error('user.js error')
+	  console.error(error)
+	  !local && res.status(401).send('No user found')
+	  throw error;
 	});
-});
+}
+export default withApiAuthRequired(userProfile);
