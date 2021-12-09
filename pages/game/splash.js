@@ -22,7 +22,7 @@ export default withPageAuthRequired (function Home() {
 			if(response) userFestivals(response)
 		}
 	  if(user) fetchSeries()
-	}, []);
+	}, [user]);
   return (
     <div className={styles.container}>
       <Head>

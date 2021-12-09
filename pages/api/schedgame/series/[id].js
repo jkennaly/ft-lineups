@@ -1,6 +1,6 @@
-import { executeQuery } from '../../../services/db'
-import { get } from "../../services/api"
-import {userProfile as festid} from "../festigram/user"
+import { executeQuery } from '../../../../services/db'
+import { get } from "../../../../services/api"
+import {userProfile as festid} from "../../festigram/user"
 
 function handleResponseStatusAndContentType(response) {
 	const contentType = response.headers.get('content-type');

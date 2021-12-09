@@ -13,7 +13,7 @@ export default function Profile() {
 const [user, setUser] = useState();// Function to collect data
 	useEffect(() => {
 	  if(logged) get(setUser);
-	}, []);
+	}, [logged]);
 	//console.log('About to return from Profile', user)
   return (
     user && user.picture ? (
