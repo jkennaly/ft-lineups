@@ -1,9 +1,6 @@
-import {
-	executeQuery
-} from '../../../services/db'
-import {
-	get
-} from "../services/api"
+import { executeQuery } from '../../../services/db'
+import { get } from "../../services/api"
+import {userProfile as festid} from "../festigram/user"
 
 function handleResponseStatusAndContentType(response) {
 	const contentType = response.headers.get('content-type');
@@ -46,7 +43,7 @@ export const modify = (req, res, user, id) => {
 
 	}
 	const params = id ? updateParams(paramObject) : createParams(paramObject)
-	executeQuery(query, params)
+	return executeQuery(query, params)
 		.then(handleResponseStatusAndContentType)
 		.then(models => {
 
@@ -61,12 +58,9 @@ export const modify = (req, res, user, id) => {
 		});
 }
 
-export default function modelHandler(req, res) {
+export default async function modelHandler(req, res) {
 
-	const [user, setUser] = useState();
-	useEffect(() => {
-		get(setUser);
-	}, []);
+	const user = await festid(req, res, true)
 	const {
 		query: {
 			id,
@@ -94,7 +88,7 @@ export default function modelHandler(req, res) {
 			break
 		case 'PUT':
 		case 'POST':
-			modify(req, res, user, id)
+			return modify(req, res, user, id)
 			break
 		default:
 			res.setHeader('Allow', ['GET', 'PUT', 'POST'])
