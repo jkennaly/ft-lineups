@@ -6,6 +6,7 @@ import { ModalPopper } from './Modal'
 import { createFestival } from '../services/active'
 import React, { useState } from 'react';
 import FestivalName from './FestivalName'
+import { useRouter } from 'next/router'
 
 
 export default function Example({festivals}) {
@@ -16,10 +17,16 @@ export default function Example({festivals}) {
 		return createFestival(val)
 	}
 	const [newName, setNewName] = useState('')
+	const router = useRouter()
 	//console.log('FestivalList festivals', festivals)
   return (
     <div className="text-center">
-      {festivals.map(f => <Card key={f.id} name={f.name} />)}
+      {festivals.map((f, i) => <Card 
+      	key={f.id} 
+      	name={f.name} 
+      	colorIndex={i % 6}
+      	clicked={() => router.push(`/game/series/${f.id}`)}
+      />)}
       <div className="mt-6">
 
           <ModalPopper

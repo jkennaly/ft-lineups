@@ -1,8 +1,11 @@
 /* This example requires Tailwind CSS v2.0+ */
-export default function Card({name}) {
+export default function Card({name, colorIndex, clicked}) {
   return (
-    <div className="flex">
-      <div className="mr-4 flex-shrink-0 self-center">
+    <div 
+    	onClick={clicked ? clicked : () => {}}
+    	className={`flex my-6 p-4 rounded-lg cvlc-${colorIndex} cursor-pointer hover:bg-indigo-600`}
+    >
+      <div className={`mr-4 flex-shrink-0 self-center`}>
         <svg
           className="h-16 w-16 border border-gray-300 bg-white text-gray-300"
           preserveAspectRatio="none"

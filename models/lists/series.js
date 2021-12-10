@@ -27,3 +27,20 @@ export function userSeries(schedUser) {
 		})
 }
 
+
+
+export function getSeries(id) {
+	return get(() => {}, {
+				path: `${origin}/api/schedgame/series/${id}`
+			})
+		.then(series => {
+			//console.log('seriesData', series)
+			return series
+		})
+		.catch(error => {
+		  console.error('userSeries error models/lists/series.js')
+		  console.error(error)
+		  throw error
+		})
+}
+

@@ -71,12 +71,12 @@ export default async function modelHandler(req, res) {
 
 	switch (method) {
 		case 'GET':
-			return executeQuery('SELECT * from `festival_series` WHERE id=?', [id])
-				.then(handleResponseStatusAndContentType)
+
+			return executeQuery({query: 'SELECT * from `festival_series` WHERE id=?', params: [id]})
 				.then(models => {
 
-					//console.log('recovered modelsdata', models)
-					return models
+					console.log('recovered modelsdata', models[0])
+					return models[0]
 				})
 				.then(models => res.status(200).json(models))
 				.catch(error => {
