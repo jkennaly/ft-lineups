@@ -27,7 +27,7 @@ export default function Header({active}) {
 	const router = useRouter()
 	//console.log('Header active', active)
 	const festivalRoute = active && active.series && `/game/series/${active.series}`
-	const yearRoute = active && active.year && `/game/year/${active.year}`
+	const yearRoute = active && active.year && `/game/years/${active.year}`
 	const dateRoute = active && active.date && `/game/date/${active.date}`
 	const dayRoute = active && active.day && `/game/day/${active.day}`
 	const setRoute = active && active.set && `/game/set/${active.set}`
