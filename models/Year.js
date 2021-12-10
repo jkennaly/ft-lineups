@@ -1,4 +1,5 @@
 
 export default function Year(opt) {
-	this.name = opt.name
+	this.year = opt.year
+	this.series = opt.series
 }

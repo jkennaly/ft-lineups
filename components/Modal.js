@@ -66,7 +66,7 @@ function ModalContainer({ setOpen, data, setData, content, withSubmit, title, su
   }
   function submit(e) {
   	e.preventDefault()
-  	submission[0](submission[1])
+  	submission && submission[0](submission[1])
     close();
   }
   
@@ -91,7 +91,7 @@ export function ModalPopper(props) {
 
   return (
     <div>
-      <button
+      {!props.buttonHide && <button
         onClick={() => {
           props.allowOpen()
           setOpen(true);
@@ -101,8 +101,8 @@ export function ModalPopper(props) {
         className={props.buttonClasses}
       >
         {props.buttonContent}
-      </button>
-      {open && !props.forceClose && (
+      </button>}
+      {(open || props.buttonHide) && !props.forceClose && (
         <ModalContainer
           {...props}
           setOpen={setOpen}

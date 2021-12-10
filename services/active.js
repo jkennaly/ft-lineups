@@ -1,4 +1,5 @@
 import Series from '../models/Series'
+import Year from '../models/Year'
 
 import { get, post } from "./api"
 
@@ -30,7 +31,6 @@ export function Festival(data = {}) {
 
 export function createFestival(name) {
 	const series = new Series({name})
-	const activeFestival = new Festival({series})
 	return post(() => {}, {
 		path: `${origin}/api/schedgame/series/`,
 		body: series,
@@ -38,6 +38,45 @@ export function createFestival(name) {
 	})
 }
 
+export function createYear({year, series}) {
+	const festYear = new Year({year, series})
+	return post(() => {}, {
+		path: `${origin}/api/schedgame/years/`,
+		body: festYear,
+		contentType: 'application/json'
+	})
+}
+
 export function currentFestival() {
 	return activeFestival.series && activeFestival
 }
+
+
+export const events = (function active(){
+
+	const active = {
+		series: 0,
+		year: 0,
+		date: 0,
+		day: 0,
+		"set": 0
+	}
+	function setActive(opt = {event: "series", id: 0}) {
+		if(active[opt.event] === opt.id) return active
+		active[opt.event] = opt.id
+		if(['day', 'date', 'year', 'series'].includes(opt.event)) active['set'] = 0
+		if(['date', 'year', 'series'].includes(opt.event)) active['day'] = 0
+		if(['year', 'series'].includes(opt.event)) active['date'] = 0
+		if(['series'].includes(opt.event)) active['year'] = 0
+		//console.log('setting active:', opt, active)
+		return active
+	}
+
+	function getActive() {
+		//console.log('getting active:', active)
+		return active
+	}
+	return {
+		getActive, setActive
+	}
+}())

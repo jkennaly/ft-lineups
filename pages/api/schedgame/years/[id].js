@@ -15,18 +15,18 @@ function handleResponseStatusAndContentType(response) {
 	else throw new Error(`Unsupported response content-type: ${contentType}`);
 }
 
-const updateQuery = `UPDATE festival_series
-	SET(name, description, website, hiatus) 
-    VALUES(?, ?, ?, ?) WHERE id=? AND user=?`
-const updateParams = ({id, user, name, description, website, hiatus}) => {
-	return [name, description, website, hiatus, id, user]
+const updateQuery = `UPDATE festivals
+	SET(year, series) 
+    VALUES(?, ?) WHERE id=? AND user=?`
+const updateParams = ({year, series, id, user}) => {
+	return [year, series, id, user]
 }
 
 const createQuery = `INSERT INTO 
-	festival_series(user, name, description, website, hiatus) 
-    VALUES(?, ?, ?, ?, 0)`
-const createParams = ({user, name, description, website}) => {
-	return [user, name, description, website]
+	festivals(year, series, user) 
+    VALUES(?, ?, ?)`
+const createParams = ({year, series, user}) => {
+	return [year, series, user]
 }
 
 export const modify = (req, res, user, id) => {
@@ -36,10 +36,8 @@ export const modify = (req, res, user, id) => {
 	const paramObject = {
 		id,
 		user: user.id,
-		name: req && req.body && req.body.name ? req.body.name : '',
-		description: req && req.body && req.body.description ? req.body.description : '',
-		website: req && req.body && req.body.website ? req.body.website : '',
-		hiatus: req && req.body && req.body.hiatus ? req.body.hiatus : 0,
+		year: req && req.body && req.body.year ? req.body.year : '',
+		series: req && req.body && req.body.series ? req.body.series : ''
 
 	}
 	const params = id ? updateParams(paramObject) : createParams(paramObject)
@@ -72,7 +70,7 @@ export default async function modelHandler(req, res) {
 	switch (method) {
 		case 'GET':
 
-			return executeQuery({query: 'SELECT * from `festival_series` WHERE id=?', params: [id]})
+			return executeQuery({query: 'SELECT * from `festivals` WHERE id=?', params: [id]})
 				.then(models => {
 
 					//console.log('recovered modelsdata', models[0])

@@ -35,7 +35,7 @@ export function getSeries(id) {
 			})
 		.then(series => {
 			//console.log('seriesData', series)
-			return series
+			return series[0]
 		})
 		.catch(error => {
 		  console.error('userSeries error models/lists/series.js')

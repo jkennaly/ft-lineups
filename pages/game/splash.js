@@ -3,13 +3,17 @@ import Image from 'next/image'
 import Profile from '../../components/Profile'
 import Empty from '../../components/EmptyFestivalList'
 import FestivalList from '../../components/FestivalList'
+import SubHeader from '../../components/shell/SubHeader'
+import Header from '../../components/shell/Header'
 import styles from '../../styles/Home.module.css'
-import { currentFestival } from '../../services/active'
+import { currentFestival, events } from '../../services/active'
 import React, { useState, useEffect } from "react";
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { userSeries } from '../../models/lists/series'
-import { useUser } from '@auth0/nextjs-auth0';
+import { useUser } from '@auth0/nextjs-auth0'
 
+
+const {getActive} = events
 
 export default withPageAuthRequired (function Home() {
 	const { user } = useUser()
@@ -29,11 +33,11 @@ export default withPageAuthRequired (function Home() {
         <title>Sched Game</title>
         <meta name="description" content="Scheduling festivals for fun and profit" />
         <link rel="icon" href="/favicon.ico" />
-        <Profile />
-        <a href="/api/auth/login">Login</a>
-
-        <a href="/api/auth/logout">Logout</a>
       </Head>
+      <Header active={getActive()}/>
+      <SubHeader>
+      	My Festivals
+      </SubHeader>
 
       <main className={styles.main}>
         <h1 className={styles.title}>

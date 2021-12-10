@@ -51,4 +51,5 @@ export const post = async (receiver, opt = {body: {}}) => {
 
   // update the state
   receiver(response);
+  return response
 };
