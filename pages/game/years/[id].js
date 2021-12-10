@@ -34,8 +34,8 @@ export default withPageAuthRequired (function Home() {
 				setSeries(fetchSeries)
 			} 
 		}
-	  if(user && (!year || year.id !== id)) fetchYear()
-	}, [user, getActive()]);
+	  if(user) fetchYear()
+	}, [user, id, getActive()]);
 	const [hidden, hideModal] = useState(true)
 	function closeModal(val) {
 		console.log('creating year', val)

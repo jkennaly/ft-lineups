@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-import Document, { Html, Head, Main, NextScript } from 'next/document'
+import Image from 'next/image'
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
@@ -47,7 +47,7 @@ export default function Header({active}) {
                 <div className="flex items-center justify-between h-16">
                   <div className="flex items-center">
                     <div className="flex-shrink-0">
-                      <img
+                      <Image
                         className="h-8 w-8"
                         src="https://festigram.app/img/insignia lighter 512x512.png"
                         alt="Workflow"
@@ -89,7 +89,7 @@ export default function Header({active}) {
                         <div>
                           <Menu.Button className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                             <span className="sr-only">Open user menu</span>
-                            <img className="h-8 w-8 rounded-full" src={user.picture} alt="" />
+                            <Image className="h-8 w-8 rounded-full" src={user.picture} alt="" />
                           </Menu.Button>
                         </div>
                         <Transition
@@ -156,7 +156,7 @@ export default function Header({active}) {
                 <div className="pt-4 pb-3 border-t border-gray-700">
                   <div className="flex items-center px-5">
                     <div className="flex-shrink-0">
-                      <img className="h-10 w-10 rounded-full" src={user.picture} alt="" />
+                      <Image className="h-10 w-10 rounded-full" src={user.picture} alt="" />
                     </div>
                     <div className="ml-3">
                       <div className="text-base font-medium text-white">{user.name}</div>

@@ -38,8 +38,8 @@ export default withPageAuthRequired (function Home() {
 				setYears(yearResponse)	
 			} 
 		}
-	  if(user && (!festival || festival.id !== id)) fetchSeries()
-	}, [user, getActive()]);
+	  if(user) fetchSeries()
+	}, [user, id, getActive()]);
 	const [hidden, hideModal] = useState(true)
 	function closeModal(val) {
 		console.log('creating year', val)
