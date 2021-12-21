@@ -71,8 +71,55 @@ export default withPageAuthRequired (function Home() {
       	{series && year && `${series && series.name} ${year && year.year}`}
       </SubHeader>
 
-      <main className={styles.main}>
-      
+      <main className="">
+	      <ul role="list" className="grid grid-cols-1 gap-6 grid-cols-2">
+		      <li 
+		      	onClick={openModal}
+		      	key={0} 
+		      	className="cursor-pointer hover:bg-indigo-600 cvlc-0 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
+		      >
+		      	<h3 className="text-gray-900 text-sm font-medium truncate">Copy a Lineup</h3>
+	            
+		      </li>
+		      <li 
+		      	onClick={openModal}
+		      	key={1} 
+		      	className="cursor-pointer hover:bg-indigo-600 cvlc-1 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
+		      >
+		      	<h3 className="text-gray-900 text-sm font-medium truncate">Add Artists</h3>
+		      </li>
+		      <li 
+		      	onClick={openModal}
+		      	key={1} 
+		      	className="cursor-pointer hover:bg-indigo-600 cvlc-2 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
+		      >
+		      	<h3 className="text-gray-900 text-sm font-medium truncate">Remove Artists</h3>
+		      </li>
+	      </ul>
+	      <ul role="list" className="grid grid-cols-1 gap-6 grid-cols-2">
+		      <li 
+		      	onClick={openModal}
+		      	key={1} 
+		      	className="cursor-pointer hover:bg-indigo-600 cvlc-3 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
+		      >
+		      	<h3 className="text-gray-900 text-sm font-medium truncate">Add a Date</h3>
+		      </li>
+		      <li 
+		      	onClick={openModal}
+		      	key={1} 
+		      	className="cursor-pointer hover:bg-indigo-600 cvlc-4 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
+		      >
+		      	<h3 className="text-gray-900 text-sm font-medium truncate">Remove a Date</h3>
+		      </li>
+	      </ul>
+        <div className="pt-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
+        	<div className="w-full bcoc min-w-40vw" >
+        		<div className="flex items-center justify-center" ><h1 className="w-fit" >Lineup</h1></div>
+        	</div>
+        	<div className="w-full bcoc min-w-40vw" >
+        		<div className="flex items-center justify-center" ><h1 className="w-fit" >Dates</h1></div>
+        	</div>
+        </div>
 	      
 	      
       </main>

@@ -25,6 +25,7 @@ export function getYear(id) {
 		path: `${origin}/api/schedgame/years/${id}`
 	})
 		.then(series => {
+			if(!series || !series[0]) throw new Error('No data recvd')
 			//console.log('seriesData', series)
 			return series[0]
 		})

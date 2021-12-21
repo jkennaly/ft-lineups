@@ -78,3 +78,8 @@ a {
 .cvlc-h {
 	background: var(--background-color-active);
 }
+
+.bcoc {
+	background: var(--background-color-own-content);
+	
+}

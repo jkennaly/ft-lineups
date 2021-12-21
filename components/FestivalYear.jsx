@@ -17,7 +17,8 @@ import React, { useState } from 'react';
 */
 
 export default function FestivalYear({save, nameChange, baseObject}) {
-	const [name, setName] = useState(new Date().getFullYear())
+	const thisYear = new Date().getFullYear()
+	const [name, setName] = useState(thisYear)
   return (
     <div className="bg-white shadow sm:rounded-lg">
       <div className="px-4 py-5 sm:p-6">
@@ -32,7 +33,8 @@ export default function FestivalYear({save, nameChange, baseObject}) {
               name="year"
               id="year"
               className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-              value={new Date().getFullYear()}
+              defaultValue={thisYear}
+              min={thisYear}
               onChange={e => {
               	nameChange(e.target.value)
               	return setName(e.target.value)

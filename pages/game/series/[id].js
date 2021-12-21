@@ -46,8 +46,15 @@ export default withPageAuthRequired (function Home() {
 		hideModal(true)
 		return createYear(val)
 			.then(response => {
+				if(response === 'Duplicate name') throw response
 				console.log('created year', response)
 				return response
+			})
+			.catch(err => {
+				if(err !== 'Duplicate name') throw err
+					console.log(years)
+				const switchYear = years.find(y => val.series === y.series && ('' + val.year) === y.year)
+				return {insertId: switchYear.id}
 			})
 			.then(response => {
 				if(response && response.insertId) {
@@ -57,7 +64,7 @@ export default withPageAuthRequired (function Home() {
 			})
 	}
 	function openModal() {
-		console.log('opening Modal')
+		//console.log('opening Modal')
 		hideModal(false)
 		
 	}
@@ -76,7 +83,7 @@ export default withPageAuthRequired (function Home() {
       </SubHeader>
 
       <main className={styles.main}>
-      	<div className="flex py-4 w-full justify-center items-center">
+      	<div className="bcoc flex py-4 w-full justify-center items-center">
       	<span className="flex-shrink-0 inline-block px-2 py-0.5 text-green-800 font-medium bg-green-100 rounded-full">
                   Festival Years
         </span>
