@@ -10,10 +10,11 @@ import { events, createYear } from '../../../services/active'
 import React, { useState, useEffect } from "react";
 import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { getYearUp } from '../../../models/lists/festivals'
+import { yearLineups } from '../../../models/lists/lineups'
 import { useUser } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router'
-import FestivalYear from '../../../components/FestivalYear'
-import { ModalPopper } from '../../../components/Modal'
+import CopyLineup from '../../../components/CopyLineup'
+import { ModalPopper } from '../../../components/LargeModal'
 
 const {getActive, setActive} = events
 
@@ -21,6 +22,7 @@ export default withPageAuthRequired (function Home() {
 	const { user } = useUser()
 	const [year, setYear] = useState()
 	const [series, setSeries] = useState()
+	const [lineup, setLineup] = useState()
 	const router = useRouter()
   	const id = parseInt(router.query.id, 10)
 	useEffect(() => {
@@ -32,6 +34,11 @@ export default withPageAuthRequired (function Home() {
 				setActive({event: 'year', id: fetchedYear.id})
 				setYear(fetchedYear)	
 				setSeries(fetchSeries)
+			} 
+			const yearResponse = await yearLineups(id)
+			if(yearResponse) {
+				//console.log('yearResponse', yearResponse)
+				setLineup(yearResponse)	
 			} 
 		}
 	  if(user) fetchYear()
@@ -57,7 +64,6 @@ export default withPageAuthRequired (function Home() {
 		hideModal(false)
 		
 	}
-	const [newYear, setNewYear] = useState('')
   return (
     <div className={styles.container}>
       <Head>
@@ -76,7 +82,7 @@ export default withPageAuthRequired (function Home() {
 		      <li 
 		      	onClick={openModal}
 		      	key={0} 
-		      	className="cursor-pointer hover:bg-indigo-600 cvlc-0 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
+		      	className="cursor-pointer my-2 hover:bg-indigo-600 cvlc-0 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
 		      >
 		      	<h3 className="text-gray-900 text-sm font-medium truncate">Copy a Lineup</h3>
 	            
@@ -84,33 +90,32 @@ export default withPageAuthRequired (function Home() {
 		      <li 
 		      	onClick={openModal}
 		      	key={1} 
-		      	className="cursor-pointer hover:bg-indigo-600 cvlc-1 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
-		      >
-		      	<h3 className="text-gray-900 text-sm font-medium truncate">Add Artists</h3>
-		      </li>
-		      <li 
-		      	onClick={openModal}
-		      	key={1} 
-		      	className="cursor-pointer hover:bg-indigo-600 cvlc-2 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
-		      >
-		      	<h3 className="text-gray-900 text-sm font-medium truncate">Remove Artists</h3>
-		      </li>
-	      </ul>
-	      <ul role="list" className="grid grid-cols-1 gap-6 grid-cols-2">
-		      <li 
-		      	onClick={openModal}
-		      	key={1} 
-		      	className="cursor-pointer hover:bg-indigo-600 cvlc-3 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
+		      	className="cursor-pointer my-2 hover:bg-indigo-600 cvlc-3 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
 		      >
 		      	<h3 className="text-gray-900 text-sm font-medium truncate">Add a Date</h3>
 		      </li>
 		      <li 
 		      	onClick={openModal}
-		      	key={1} 
-		      	className="cursor-pointer hover:bg-indigo-600 cvlc-4 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
+		      	key={2} 
+		      	className="cursor-pointer my-2 hover:bg-indigo-600 cvlc-1 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
+		      >
+		      	<h3 className="text-gray-900 text-sm font-medium truncate">Add Artists</h3>
+		      </li>
+		      <li 
+		      	onClick={openModal}
+		      	key={3} 
+		      	className="cursor-pointer my-2 hover:bg-indigo-600 cvlc-4 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
 		      >
 		      	<h3 className="text-gray-900 text-sm font-medium truncate">Remove a Date</h3>
 		      </li>
+		      <li 
+		      	onClick={openModal}
+		      	key={4} 
+		      	className="cursor-pointer my-2 hover:bg-indigo-600 cvlc-2 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
+		      >
+		      	<h3 className="text-gray-900 text-sm font-medium truncate">Remove Artists</h3>
+		      </li>
+
 	      </ul>
         <div className="pt-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
         	<div className="w-full bcoc min-w-40vw" >
@@ -124,18 +129,18 @@ export default withPageAuthRequired (function Home() {
 	      
       </main>
       <ModalPopper
-          	title="Add Year to Festival"
+          	title="Copy Lineup"
           	withSubmit={false}
           	forceClose={hidden}
 
           	allowOpen={() => hideModal(false)}
-          	content={<FestivalYear 
+          	content={<CopyLineup 
           		baseObject={{series: id}} 
-          		nameChange={setNewYear} 
+          		lineChange={setLineup} 
           		save={closeModal} 
           	/>}
           	buttonHide={true}
-          />
+      />
 
       <footer className={styles.footer}>
       </footer>
