@@ -79,7 +79,7 @@ export default withApiAuthRequired(async function model(req, res) {
 			})
 				.then(models => {
 
-					console.log('recovered modelsdata', models)
+					//console.log('recovered modelsdata', models)
 					return models[0]
 				})
 				.then(models => res.status(200).json(models))
