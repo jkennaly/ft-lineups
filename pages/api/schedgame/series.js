@@ -70,7 +70,7 @@ export default withApiAuthRequired(async function model(req, res) {
 	const vals = [userEl, nameEl, hiatusEl].filter(x => x)
 	switch (method) {
 		case 'GET':
-			//console.log('get series params', vals)
+			console.log('get series params', vals)
 			const connString = 'SELECT * FROM `festival_series` WHERE 1=1' + where
 			//console.log('get series sql', connString, vals)
 			return executeQuery({
@@ -79,7 +79,7 @@ export default withApiAuthRequired(async function model(req, res) {
 			})
 				.then(models => {
 
-					//console.log('recovered modelsdata', models)
+					console.log('recovered modelsdata', models)
 					return models[0]
 				})
 				.then(models => res.status(200).json(models))
