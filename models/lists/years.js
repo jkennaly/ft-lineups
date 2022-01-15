@@ -36,3 +36,19 @@ export function getYear(id) {
 		})
 }
 
+
+
+export function fgYears() {
+	return get(() => {}, {
+		path: `${origin}/api/festigram/years`
+	})
+		.then(series => {
+			//console.log('lineupsData', lineups)
+			return series
+		})
+		.catch(error => {
+		  console.error('fgLineups error models/lists/festivals.js')
+		  console.error(error)
+		  throw error
+		})
+}
