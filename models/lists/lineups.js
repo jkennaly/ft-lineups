@@ -21,7 +21,7 @@ export function getLineups(id) {
 
 export function yearLineups(yearId) {
 	return get(() => {}, {
-		path: `${origin}/api/schedgame/lineups?festival=` + yearId
+		path: `${origin}/api/schedgame/lineups?festival=${yearId}`
 	})
 		.then(lineups => {
 			//console.log('lineupsData', lineups)
@@ -29,6 +29,21 @@ export function yearLineups(yearId) {
 		})
 		.catch(error => {
 		  console.error('userSeries error models/lists/lineups.js')
+		  console.error(error)
+		  throw error
+		})
+}
+
+export function fgLineups() {
+	return get(() => {}, {
+		path: `${origin}/api/festigram/lineup`
+	})
+		.then(lineups => {
+			//console.log('lineupsData', lineups)
+			return lineups
+		})
+		.catch(error => {
+		  console.error('fgLineups error models/lists/lineups.js')
 		  console.error(error)
 		  throw error
 		})

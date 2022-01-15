@@ -14,7 +14,7 @@ import { yearLineups } from '../../../models/lists/lineups'
 import { useUser } from '@auth0/nextjs-auth0';
 import { useRouter } from 'next/router'
 import CopyLineup from '../../../components/CopyLineup'
-import { ModalPopper } from '../../../components/LargeModal'
+import { ModalPopper } from '../../../components/Modal'
 
 const {getActive, setActive} = events
 
@@ -28,7 +28,7 @@ export default withPageAuthRequired (function Home() {
 	useEffect(() => {
 		const fetchYear = async () => {
 			const [fetchSeries, fetchedYear] = await getYearUp(id)
-			console.log('id getYear', fetchedYear)
+			//console.log('id getYear', fetchedYear)
 			if(fetchedYear) {
 				setActive({event: 'series', id: fetchSeries.id})
 				setActive({event: 'year', id: fetchedYear.id})
@@ -45,7 +45,7 @@ export default withPageAuthRequired (function Home() {
 	}, [user, id, getActive()]);
 	const [hidden, hideModal] = useState(true)
 	function closeModal(val) {
-		console.log('creating year', val)
+		//console.log('creating year', val)
 		hideModal(true)
 		return createYear(val)
 			.then(response => {
@@ -60,8 +60,14 @@ export default withPageAuthRequired (function Home() {
 			})
 	}
 	function openModal() {
-		console.log('opening Modal')
+		//console.log('opening Modal')
+		//console.log('modal hidden:', hidden)
 		hideModal(false)
+		
+	}
+	function cancelModal() {
+		//console.log('cancel Modal')
+		hideModal(true)
 		
 	}
   return (
@@ -131,9 +137,9 @@ export default withPageAuthRequired (function Home() {
       <ModalPopper
           	title="Copy Lineup"
           	withSubmit={false}
-          	forceClose={hidden}
-
-          	allowOpen={() => hideModal(false)}
+          	openModal={openModal}
+          	closeModal={cancelModal}
+          	hidden={hidden}
           	content={<CopyLineup 
           		baseObject={{series: id}} 
           		lineChange={setLineup} 

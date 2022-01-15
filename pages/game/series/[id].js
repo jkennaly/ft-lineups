@@ -65,7 +65,13 @@ export default withPageAuthRequired (function Home() {
 	}
 	function openModal() {
 		//console.log('opening Modal')
+		//console.log('modal hidden:', hidden)
 		hideModal(false)
+		
+	}
+	function cancelModal() {
+		//console.log('cancel Modal')
+		hideModal(true)
 		
 	}
 	const [newYear, setNewYear] = useState('')
@@ -143,9 +149,9 @@ export default withPageAuthRequired (function Home() {
       <ModalPopper
           	title="Add Year to Festival"
           	withSubmit={false}
-          	forceClose={hidden}
-
-          	allowOpen={() => hideModal(false)}
+          	openModal={openModal}
+          	closeModal={cancelModal}
+          	hidden={hidden}
           	content={<FestivalYear 
           		baseObject={{series: id}} 
           		nameChange={setNewYear} 

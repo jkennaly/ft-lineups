@@ -37,7 +37,6 @@ const createParams = ({year, band, user, priority}) => {
 
 export default withApiAuthRequired(async function model(req, res) {
 
-
 	const festUser = await festid(req, res, true)
 
 	//console.log('user found:', festUser)
@@ -46,7 +45,8 @@ export default withApiAuthRequired(async function model(req, res) {
 		query: {
 			user,
 			year,
-			band
+			band,
+			source
 		},
 		method
 	} = req
@@ -65,24 +65,31 @@ export default withApiAuthRequired(async function model(req, res) {
 	const vals = [userEl, yearEl, bandEl].filter(x => x)
 	switch (method) {
 		case 'GET':
-			//console.log('get series params', vals)
-			const connString = 'SELECT * FROM `band_list` WHERE 1=1' + where
-			//console.log('get series sql', connString, vals)
-			return executeQuery({
-					params: vals,
-					query: connString
-			})
-				.then(models => {
+			if(source !== 'festigram') {
 
-					//console.log('recovered modelsdata', models)
-					return models[0]
+				//console.log('get series params', vals)
+				const connString = 'SELECT * FROM `band_list` WHERE 1=1' + where
+				//console.log('get series sql', connString, vals)
+				return executeQuery({
+						params: vals,
+						query: connString
 				})
-				.then(models => res.status(200).json(models))
-				.catch(error => {
-					console.error(error);
-					res.status(500).send('No models found')
-					return error;
-				});
+					.then(models => {
+
+						//console.log('recovered modelsdata', models)
+						return models[0]
+					})
+					.then(models => res.status(200).json(models))
+					.catch(error => {
+						console.error(error);
+						res.status(500).send('No models found')
+						return error;
+					});
+			} else if(festUser) {
+				
+			} else {
+				return res.status(403).send('Must be logged in')
+			}
 
 			break
 		case 'PUT':
