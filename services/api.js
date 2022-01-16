@@ -6,9 +6,9 @@ async function handleResponseStatusAndContentType(response) {
   if (response.status >= 400) throw new Error(await response.text())
 
   if (contentType === null) return Promise.resolve(null);
-  else if (contentType.startsWith('application/json;')) return await response.json();
-  else if (contentType.startsWith('text/plain;')) throw new Error(await response.text());
-  else if (contentType.startsWith('text/html;')) throw new Error(await response.text());
+  else if (contentType.startsWith('application/json')) return await response.json();
+  else if (contentType.startsWith('text/plain')) throw new Error(await response.text());
+  else if (contentType.startsWith('text/html')) throw new Error(await response.text());
   else throw new Error(`Unsupported response content-type: ${contentType}`);
 }
 const origin = process.env.NEXT_PUBLIC_ORIGIN

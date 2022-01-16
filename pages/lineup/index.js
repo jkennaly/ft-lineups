@@ -1,9 +1,6 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import EventSelector from '../../components/cards/EventSelector'
-import Profile from '../../components/Profile'
-import Empty from '../../components/EmptyFestivalList'
-import FestivalList from '../../components/FestivalList'
+import LineupEditor from '../../components/LineupEditor'
 import SubHeader from '../../components/shell/SubHeader'
 import Header from '../../components/shell/Header'
 import styles from '../../styles/Home.module.css'
@@ -51,6 +48,10 @@ export default withPageAuthRequired (function Home() {
 	  	fetchLineups()
 	  } 
 	}, [user]);
+	
+	const activeLineups = (selectedYear && lineups && lineups.length ? lineups : [])
+		.filter(l => l.year === selectedYear)
+
   return (
     <div className={styles.container}>
       <Head>
@@ -69,7 +70,7 @@ export default withPageAuthRequired (function Home() {
         	years={years} 
         	selectSeries={selectSeries} 
         	selectYear={selectYear} 
-      	/>
+      	>
 
       <button
         type="button"
@@ -83,6 +84,8 @@ export default withPageAuthRequired (function Home() {
       >
         Add a Festival Year
       </button>
+      </EventSelector>
+      {selectedYear ? <LineupEditor /> : ''}
       </main>
 
       <footer className={styles.footer}>

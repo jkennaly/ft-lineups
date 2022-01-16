@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 const exampleSeries = [{name: 'Coachella', id: 1}, {name: 'Bonnaroo', id: 2}]
 const exampleYears = [{year: '2020', series: 1, id: 1}, {year: '2022', series: 2, id: 2}]
-export default function Card({name, colorIndex, clicked, series, years, selectYear, selectSeries}) {
+export default function Card({children, name, colorIndex, clicked, series, years, selectYear, selectSeries}) {
 	const [selectedSeries, setSeries] = useState()
 	const [selectedYear, setYear] = useState()
 	const [displayYears, showYears] = useState([])
@@ -12,16 +12,19 @@ export default function Card({name, colorIndex, clicked, series, years, selectYe
 		selectYear()
 		setSeries(val)
 		setYear()
-		const seriesYears = years && selectedSeries && years.filter(y => y.series === val).sort((a, b) => a.year.localeCompare(b.year))
-		//console.log('seriesYears', val, years)
+		const seriesYears = years && val && years.filter(y => y.series === val).sort((a, b) => a.year.localeCompare(b.year))
+		//console.log('seriesYears', val, years, seriesYears)
 		showYears(seriesYears)
 
 	}
+	const optYears = displayYears ? displayYears : []
     return (
+    	<div>
         <div 
         	onClick={clicked ? clicked : () => {}}
         	className={`flex my-6 p-4 rounded-lg cvlc-${colorIndex} cursor-pointer hover:bg-indigo-600`}
         >
+        	<form>
 	        <label htmlFor="series-selector">Festival</label>
 	        <select 
 	        	id="series-selector" 
@@ -45,11 +48,15 @@ export default function Card({name, colorIndex, clicked, series, years, selectYe
             	}}
             >
             	<option value="unselected">Choose...</option>
-	        	{(displayYears ? displayYears : exampleYears).map(y => {
+	        	{optYears.map(y => {
 		return <option key={y.id} value={y.id}>{y.year}</option>
 	})}
 	        </select>
-    
+	        </form>
+	        </div>
+    	{children && <div>
+    		{children}
+    	</div>}
         </div>
     )
 }

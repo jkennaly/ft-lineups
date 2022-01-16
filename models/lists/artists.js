@@ -1,19 +1,28 @@
 
-// models/lists/festivals.js
+// models/lists/artists.js
 
 import { get, post } from "../../services/api"
 
 
-export function getArtists(artistIds) {
+
+export function fgArtists(...ids) {
+	const filterObject= {
+		where: {
+			and: [
+				{deleted: false},
+				ids & ids.length ? {id: {inq: ids}} : undefined
+			].filter(x => x)
+		}
+	}
 	return get(() => {}, {
-				path: `${origin}/api/schedgame/lineups/${id}`
-			})
-		.then(lineups => {
-			//console.log('lineupsData', lineups)
-			return lineups[0]
+		path: `${origin}/api/festigram/artists?filter=${JSON.stringify(filterObject)}`
+	})
+		.then(artists => {
+			//console.log('artistData', artists)
+			return artists
 		})
 		.catch(error => {
-		  console.error('userSeries error models/lists/lineups.js')
+		  console.error('fgLineups error models/lists/artists.js')
 		  console.error(error)
 		  throw error
 		})

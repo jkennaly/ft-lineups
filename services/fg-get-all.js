@@ -8,13 +8,13 @@ const redis = require("redis");
 
 const client = redis.createClient({url: process.env.REDIS_URL});
 
-/*
-client.connect()
+
+const con = client.connect()
 	.catch(err => {
 		console.error('Redis connect error')
 		console.error(err)
 	})
-*/
+
 
 function handleResponseStatusAndContentType(response) {
 	const contentType = response.headers.get('content-type');
@@ -30,11 +30,19 @@ function handleResponseStatusAndContentType(response) {
 }
 export default function fgGetAll (modelName) {
 
-	const apiUrl = 'https://festigram.app/api/'
-	const fgUrl = apiUrl + modelName + '?filter[where][deleted]=false'
-	const leKey = `fg-${modelName}.${fgUrl}`
 
 	async function getAll(req, res, local) {
+
+		const {
+			query: {
+					filter
+				}
+		} = req
+		const qs = `?filter${filter ? '=' + filter : '[where][deleted]=false'}`
+		const apiUrl = 'https://festigram.app/api/'
+		const fgUrl = apiUrl + modelName + qs
+		const leKey = `fg-${modelName}.${fgUrl}`
+
 	    const { accessToken } = await getAccessToken(req, res, {
 	        scopes: ['openid', 'profile', 'email']
 	    });
@@ -42,7 +50,7 @@ export default function fgGetAll (modelName) {
 		// `getAccessToken` will fetch you a new one using the `refresh_token` grant
 		//console.log('redis url', process.env.REDIS_URL)
 		const t0 = Date.now()
-		return client.connect()
+		return con
 			//.then(() => console.log('redis connect', Date.now() - t0))
 			.then(() => client.get(leKey))
 			//.then((data) => console.log('redis get', Date.now() - t0) || data)
@@ -52,7 +60,6 @@ export default function fgGetAll (modelName) {
 				console.error(err)
 			})
 			.then(data => {
-				if (data) client.quit()
 				if (data) return !local && res.status(200).json(data) || data
 				console.log('Redis data not available, requesting form fg api')
 				return fetch(fgUrl, {
@@ -68,7 +75,6 @@ export default function fgGetAll (modelName) {
 						client.set(leKey, JSON.stringify(final), {
 							EX: 3600 * 24
 						})
-							.then(() => client.quit())
 						
 						return final
 					})
