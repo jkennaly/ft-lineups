@@ -4,13 +4,13 @@ import Image from 'next/image'
 import React, { useState } from 'react';
 
 
-export default function Example({posterUrl}) {
+export default function Poster({ posterUrl }) {
   return (
     <div className="text-center">
-      
-        <img
-        	src={"https://media-prd.coachella.com/content/content_images/232/tUnwiNVDOnLT0TT0qHeiWVWfcYGwBw40ImQoVHGZ.jpeg"}
-        />
+
+      <img
+        src={"https://media-prd.coachella.com/content/content_images/232/tUnwiNVDOnLT0TT0qHeiWVWfcYGwBw40ImQoVHGZ.jpeg"}
+      />
     </div>
   )
 }

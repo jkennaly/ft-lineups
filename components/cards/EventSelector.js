@@ -12,7 +12,7 @@ export default function Card({children, name, colorIndex, clicked, series, years
 		selectYear()
 		setSeries(val)
 		setYear()
-		const seriesYears = years && val && years.filter(y => y.series === val).sort((a, b) => a.year.localeCompare(b.year))
+		const seriesYears = years && val && years.filter(y => y.series === val || !y.series).sort((a, b) => a.year.localeCompare(b.year))
 		//console.log('seriesYears', val, years, seriesYears)
 		showYears(seriesYears)
 

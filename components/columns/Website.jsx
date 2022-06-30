@@ -4,11 +4,12 @@ import Image from 'next/image'
 import React, { useState } from 'react';
 
 
-export default function Example({lineupUrl}) {
+export default function Website({lineupUrl}) {
+  console.log(lineupUrl)
   return (
     <div className="text-center">
       
-        <iframe src="https://coachella.com/"/>
+        <iframe src={lineupUrl}/>
     </div>
   )
 }
