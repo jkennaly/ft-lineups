@@ -38,7 +38,7 @@ export default function LineupAdd({ addRow, artistName, setArtistName, activeYea
                     <input
                         className="focus:ring-indigo-500 focus:border-indigo-500 w-96 h-full bg-green-300 block sm:text-sm border-gray-300 rounded-none"
                         value={artistName}
-                        onChange={e => setArtistName(e.target.value)}
+                        onChange={e => setArtistName(e.target.value.trim())}
                     />
                     <div className="absolute top-1/2 right-0 h-10 w-24" >
                         <div className='relative -top-1/2 flex '>

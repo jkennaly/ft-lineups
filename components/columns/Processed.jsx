@@ -77,7 +77,7 @@ export default function Processed({ lineupUrl, topRows = [], removeRow, appendWo
 								setProcessed(processed.filter((x, index) => i - topRows.length !== index))
 								e.stopPropagation()
 							}}
-							className="-ml-px  flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+							className="-ml-px  flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
 						>
 							<span className="sr-only">Delete Row</span>
 							<MinusCircleIcon className="h-5 w-5" aria-hidden="true" />

@@ -7,14 +7,13 @@ import React, { useState } from 'react';
 export default function Current({ lineup }) {
   return (
     <div className="text-center">
-      <ul>
-        {
-          lineup
-            .map(l => l.artist && l.artist.name)
-            .filter(x => x)
-            .map(n => <li key={n}>{n}</li>)
-        }
-      </ul>
+      {
+        lineup
+          .map(l => l.artist && l.artist.name)
+          .filter(x => x)
+          .sort((a, b) => a.localeCompare(b))
+          .map(n => <span className='mx-1' key={n}>{n}</span>)
+      }
     </div>
   )
 }

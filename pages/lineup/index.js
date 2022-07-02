@@ -33,38 +33,26 @@ export default withPageAuthRequired(function Home() {
 	useEffect(() => {
 		const fetchSeries = async () => {
 			const response = await fgSeries()
-
-			//console.log('splash fetchSeries', response)
 			if (response) setSeries(response.filter(s => !s.hiatus))
 		}
 		const fetchYears = async () => {
 			const response = await fgYears()
-
-			//console.log('splash fetchSeries', response)
 			if (response) setYears(response)
 		}
 		const fetchLineups = async () => {
 			const response = await fgLineups()
-
-			//console.log('splash fetchSeries', response)
 			if (response) setLineups(Object.values(response).flatMap(l => l.allArtists))
 		}
 		const fetchTiers = async () => {
 			const response = await fgTiers()
-
-			//console.log('splash fetchSeries', response)
 			if (response) setTiers(response)
 		}
 		const fetchArtists = async () => {
 			const response = await fgArtists()
-
-			//console.log('splash fetchSeries', response)
 			if (response) setArtists(response)
 		}
 		const fetchArtistAliases = async () => {
 			const response = await fgArtistAliases()
-
-			//console.log('splash fetchSeries', response)
 			if (response) setArtistAliases(response)
 		}
 		if (user) {
