@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image'
-import { useUser } from '@auth0/nextjs-auth0';
+import { useUser } from '../services/noauth';
 
 export default function Profile() {
   const { user, error, isLoading } = useUser();

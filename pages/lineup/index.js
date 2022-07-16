@@ -6,14 +6,13 @@ import Header from '../../components/shell/Header'
 import styles from '../../styles/Home.module.css'
 import { currentFestival, events } from '../../services/active'
 import React, { useState, useEffect } from "react";
-import { withPageAuthRequired } from '@auth0/nextjs-auth0';
 import { fgSeries } from '../../models/lists/series'
 import { fgYears } from '../../models/lists/years'
 import { fgLineups } from '../../models/lists/lineups'
 import { fgArtists } from '../../models/lists/artists'
 import { fgArtistAliases } from '../../models/lists/artistAliases'
 import { fgArtistPriorities as fgTiers } from '../../models/lists/artistPriorities'
-import { useUser } from '@auth0/nextjs-auth0'
+import { useUser, withPageAuthRequired } from '../../../services/noauth'
 
 
 

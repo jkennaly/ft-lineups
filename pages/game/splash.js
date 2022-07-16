@@ -8,25 +8,25 @@ import Header from '../../components/shell/Header'
 import styles from '../../styles/Home.module.css'
 import { currentFestival, events } from '../../services/active'
 import React, { useState, useEffect } from "react";
-import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { } from './services/noauth';
 import { userSeries } from '../../models/lists/series'
-import { useUser } from '@auth0/nextjs-auth0'
+import { useUser, withPageAuthRequired } from '../../services/noauth'
 
 
-const {getActive} = events
+const { getActive } = events
 
-export default withPageAuthRequired (function Home() {
-	const { user } = useUser()
-	const [festivals, userFestivals] = useState([])
+export default withPageAuthRequired(function Home() {
+  const { user } = useUser()
+  const [festivals, userFestivals] = useState([])
 
-	useEffect(() => {
-		const fetchSeries = async () => {
-			const response = await userSeries()
-			//console.log('splash fetchSeries', response)
-			if(response) userFestivals(response)
-		}
-	  if(user) fetchSeries()
-	}, [user]);
+  useEffect(() => {
+    const fetchSeries = async () => {
+      const response = await userSeries()
+      //console.log('splash fetchSeries', response)
+      if (response) userFestivals(response)
+    }
+    if (user) fetchSeries()
+  }, [user]);
   return (
     <div className={styles.container}>
       <Head>
@@ -34,9 +34,9 @@ export default withPageAuthRequired (function Home() {
         <meta name="description" content="Scheduling festivals for fun and profit" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header active={getActive()}/>
+      <Header active={getActive()} />
       <SubHeader>
-      	My Festivals
+        My Festivals
       </SubHeader>
 
       <main className={styles.main}>

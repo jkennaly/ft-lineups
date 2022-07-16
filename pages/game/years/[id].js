@@ -8,40 +8,40 @@ import FestivalList from '../../../components/FestivalList'
 import styles from '../../../styles/Home.module.css'
 import { events, createYear } from '../../../services/active'
 import React, { useState, useEffect } from "react";
-import { withPageAuthRequired } from '@auth0/nextjs-auth0';
+import { } from './services/noauth';
 import { getYearUp } from '../../../models/lists/festivals'
 import { yearLineups } from '../../../models/lists/lineups'
-import { useUser } from '@auth0/nextjs-auth0';
+import { useUser, withPageAuthRequired } from '../.././services/noauth';
 import { useRouter } from 'next/router'
 import CopyLineup from '../../../components/CopyLineup'
 import { ModalPopper } from '../../../components/Modal'
 
-const {getActive, setActive} = events
+const { getActive, setActive } = events
 
-export default withPageAuthRequired (function Home() {
+export default withPageAuthRequired(function Home() {
 	const { user } = useUser()
 	const [year, setYear] = useState()
 	const [series, setSeries] = useState()
 	const [lineup, setLineup] = useState()
 	const router = useRouter()
-  	const id = parseInt(router.query.id, 10)
+	const id = parseInt(router.query.id, 10)
 	useEffect(() => {
 		const fetchYear = async () => {
 			const [fetchSeries, fetchedYear] = await getYearUp(id)
 			//console.log('id getYear', fetchedYear)
-			if(fetchedYear) {
-				setActive({event: 'series', id: fetchSeries.id})
-				setActive({event: 'year', id: fetchedYear.id})
-				setYear(fetchedYear)	
+			if (fetchedYear) {
+				setActive({ event: 'series', id: fetchSeries.id })
+				setActive({ event: 'year', id: fetchedYear.id })
+				setYear(fetchedYear)
 				setSeries(fetchSeries)
-			} 
+			}
 			const yearResponse = await yearLineups(id)
-			if(yearResponse) {
+			if (yearResponse) {
 				//console.log('yearResponse', yearResponse)
-				setLineup(yearResponse)	
-			} 
+				setLineup(yearResponse)
+			}
 		}
-	  if(user) fetchYear()
+		if (user) fetchYear()
 	}, [user, id, getActive()]);
 	const [hidden, hideModal] = useState(true)
 	function closeModal(val) {
@@ -53,8 +53,8 @@ export default withPageAuthRequired (function Home() {
 				return response
 			})
 			.then(response => {
-				if(response && response.insertId) {
-					setActive({event: 'year', id: response.insertId})
+				if (response && response.insertId) {
+					setActive({ event: 'year', id: response.insertId })
 					router.push(`/game/years/${response.insertId}`)
 				}
 			})
@@ -63,93 +63,93 @@ export default withPageAuthRequired (function Home() {
 		//console.log('opening Modal')
 		//console.log('modal hidden:', hidden)
 		hideModal(false)
-		
+
 	}
 	function cancelModal() {
 		//console.log('cancel Modal')
 		hideModal(true)
-		
+
 	}
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Sched Game</title>
-        <meta name="description" content="Scheduling festivals for fun and profit" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+	return (
+		<div className={styles.container}>
+			<Head>
+				<title>Sched Game</title>
+				<meta name="description" content="Scheduling festivals for fun and profit" />
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
 
-      <Header active={getActive()} />
-      <SubHeader>
-      	{series && year && `${series && series.name} ${year && year.year}`}
-      </SubHeader>
+			<Header active={getActive()} />
+			<SubHeader>
+				{series && year && `${series && series.name} ${year && year.year}`}
+			</SubHeader>
 
-      <main className="">
-	      <ul role="list" className="grid grid-cols-1 gap-6 grid-cols-2">
-		      <li 
-		      	onClick={openModal}
-		      	key={0} 
-		      	className="cursor-pointer my-2 hover:bg-indigo-600 cvlc-0 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
-		      >
-		      	<h3 className="text-gray-900 text-sm font-medium truncate">Copy a Lineup</h3>
-	            
-		      </li>
-		      <li 
-		      	onClick={openModal}
-		      	key={1} 
-		      	className="cursor-pointer my-2 hover:bg-indigo-600 cvlc-3 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
-		      >
-		      	<h3 className="text-gray-900 text-sm font-medium truncate">Add a Date</h3>
-		      </li>
-		      <li 
-		      	onClick={openModal}
-		      	key={2} 
-		      	className="cursor-pointer my-2 hover:bg-indigo-600 cvlc-1 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
-		      >
-		      	<h3 className="text-gray-900 text-sm font-medium truncate">Add Artists</h3>
-		      </li>
-		      <li 
-		      	onClick={openModal}
-		      	key={3} 
-		      	className="cursor-pointer my-2 hover:bg-indigo-600 cvlc-4 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
-		      >
-		      	<h3 className="text-gray-900 text-sm font-medium truncate">Remove a Date</h3>
-		      </li>
-		      <li 
-		      	onClick={openModal}
-		      	key={4} 
-		      	className="cursor-pointer my-2 hover:bg-indigo-600 cvlc-2 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
-		      >
-		      	<h3 className="text-gray-900 text-sm font-medium truncate">Remove Artists</h3>
-		      </li>
+			<main className="">
+				<ul role="list" className="grid grid-cols-1 gap-6 grid-cols-2">
+					<li
+						onClick={openModal}
+						key={0}
+						className="cursor-pointer my-2 hover:bg-indigo-600 cvlc-0 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
+					>
+						<h3 className="text-gray-900 text-sm font-medium truncate">Copy a Lineup</h3>
 
-	      </ul>
-        <div className="pt-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
-        	<div className="w-full bcoc min-w-40vw" >
-        		<div className="flex items-center justify-center" ><h1 className="w-fit" >Lineup</h1></div>
-        	</div>
-        	<div className="w-full bcoc min-w-40vw" >
-        		<div className="flex items-center justify-center" ><h1 className="w-fit" >Dates</h1></div>
-        	</div>
-        </div>
-	      
-	      
-      </main>
-      <ModalPopper
-          	title="Copy Lineup"
-          	withSubmit={false}
-          	openModal={openModal}
-          	closeModal={cancelModal}
-          	hidden={hidden}
-          	content={<CopyLineup 
-          		baseObject={{series: id}} 
-          		lineChange={setLineup} 
-          		save={closeModal} 
-          	/>}
-          	buttonHide={true}
-      />
+					</li>
+					<li
+						onClick={openModal}
+						key={1}
+						className="cursor-pointer my-2 hover:bg-indigo-600 cvlc-3 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
+					>
+						<h3 className="text-gray-900 text-sm font-medium truncate">Add a Date</h3>
+					</li>
+					<li
+						onClick={openModal}
+						key={2}
+						className="cursor-pointer my-2 hover:bg-indigo-600 cvlc-1 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
+					>
+						<h3 className="text-gray-900 text-sm font-medium truncate">Add Artists</h3>
+					</li>
+					<li
+						onClick={openModal}
+						key={3}
+						className="cursor-pointer my-2 hover:bg-indigo-600 cvlc-4 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
+					>
+						<h3 className="text-gray-900 text-sm font-medium truncate">Remove a Date</h3>
+					</li>
+					<li
+						onClick={openModal}
+						key={4}
+						className="cursor-pointer my-2 hover:bg-indigo-600 cvlc-2 min-h-10vh min-w-40vw col-span-1 bg-white rounded-lg shadow divide-y divide-gray-200"
+					>
+						<h3 className="text-gray-900 text-sm font-medium truncate">Remove Artists</h3>
+					</li>
 
-      <footer className={styles.footer}>
-      </footer>
-    </div>
-  )
+				</ul>
+				<div className="pt-4 grid grid-cols-1 gap-6 sm:grid-cols-2">
+					<div className="w-full bcoc min-w-40vw" >
+						<div className="flex items-center justify-center" ><h1 className="w-fit" >Lineup</h1></div>
+					</div>
+					<div className="w-full bcoc min-w-40vw" >
+						<div className="flex items-center justify-center" ><h1 className="w-fit" >Dates</h1></div>
+					</div>
+				</div>
+
+
+			</main>
+			<ModalPopper
+				title="Copy Lineup"
+				withSubmit={false}
+				openModal={openModal}
+				closeModal={cancelModal}
+				hidden={hidden}
+				content={<CopyLineup
+					baseObject={{ series: id }}
+					lineChange={setLineup}
+					save={closeModal}
+				/>}
+				buttonHide={true}
+			/>
+
+			<footer className={styles.footer}>
+			</footer>
+		</div>
+	)
 })

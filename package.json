@@ -1,9 +1,9 @@
 {
-  "name": "ft-sched-game",
+  "name": "ft-lineups",
   "description": "scheduling music festivals for fun and profit",
   "version": "0.0.1",
   "engines": {
-    "node": "14.x"
+    "node": ">=14.0.0"
   },
   "private": true,
   "scripts": {
@@ -13,12 +13,13 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@auth0/nextjs-auth0": "^1.6.1",
     "@headlessui/react": "^1.4.2",
     "@heroicons/react": "^1.0.5",
     "@tailwindcss/forms": "^0.3.4",
     "flexsearch": "^0.7.21",
     "js-cache": "^1.0.3",
+    "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^2.1.4",
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "mysql2": "^2.3.3",
@@ -29,10 +30,13 @@
     "styled-components": "^5.3.3"
   },
   "devDependencies": {
-    "autoprefixer": "^10.4.0",
+    "autoprefixer": "10.4.5",
     "eslint": "7.32.0",
     "eslint-config-next": "12.0.4",
     "postcss": "^8.4.4",
     "tailwindcss": "^2.2.19"
+  },
+  "overrides": {
+    "autoprefixer": "10.4.5"
   }
 }

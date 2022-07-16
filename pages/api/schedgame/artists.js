@@ -2,14 +2,14 @@
 import {
 	withApiAuthRequired,
 	getSession
-} from '@auth0/nextjs-auth0';
+} from '../../../services/noauth';
 import {
 	executeQuery
 } from '../../../services/db'
 import {
 	get
 } from "../../../services/api"
-import {userProfile as festid} from "../festigram/user"
+import { userProfile as festid } from "../festigram/user"
 import React, {
 	useState
 } from 'react'
@@ -31,7 +31,7 @@ function handleResponseStatusAndContentType(response) {
 const createQuery = `INSERT INTO 
 	bands(name, website, fgid, user) 
     VALUES(?, ?, ?, ?)`
-const createParams = ({name, website, fgid, user}) => {
+const createParams = ({ name, website, fgid, user }) => {
 	return [name, website, fgid, user]
 }
 
@@ -67,8 +67,8 @@ export default withApiAuthRequired(async function model(req, res) {
 			const connString = 'SELECT * FROM `bands` WHERE 1=1' + where
 			//console.log('get series sql', connString, vals)
 			return executeQuery({
-					params: vals,
-					query: connString
+				params: vals,
+				query: connString
 			})
 				.then(models => {
 
@@ -99,9 +99,9 @@ export default withApiAuthRequired(async function model(req, res) {
 			}
 			const params = createParams(paramObject)
 			return executeQuery({
-					query,
-					params
-				})
+				query,
+				params
+			})
 				.then(([models, fields]) => {
 
 					//console.log('recovered modelsdata', models, params)

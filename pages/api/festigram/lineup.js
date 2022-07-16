@@ -3,11 +3,11 @@
 import {
 	getAccessToken,
 	withApiAuthRequired
-} from '@auth0/nextjs-auth0';
+} from '../../../services/noauth';
 
 const redis = require("redis");
 
-const client = redis.createClient({url: process.env.REDIS_URL});
+const client = redis.createClient({ url: process.env.REDIS_URL });
 
 /*
 client.connect()
@@ -51,8 +51,8 @@ export async function linedEvents(req, res, local) {
 			if (data) return !local && res.status(200).json(data) || data
 			console.log('Redis data not available, requesting form fg api')
 			return fetch(fgUrl, {
-					method: 'get'
-				})
+				method: 'get'
+			})
 				.then(handleResponseStatusAndContentType)
 				.then(lineups => {
 					const festIds = lineups
@@ -68,8 +68,8 @@ export async function linedEvents(req, res, local) {
 					const festString = JSON.stringify(festFilter)
 					const festUrl = apiUrl + 'Festivals?filter=' + festString
 					return fetch(festUrl, {
-							method: 'get'
-						})
+						method: 'get'
+					})
 						.then(handleResponseStatusAndContentType)
 						.then(festivals => {
 							const festData = id => festivals.find(f => f.id === id)
@@ -86,8 +86,8 @@ export async function linedEvents(req, res, local) {
 							const seriesString = JSON.stringify(seriesFilter)
 							const seriesUrl = apiUrl + 'Series?filter=' + seriesString
 							return fetch(seriesUrl, {
-									method: 'get'
-								})
+								method: 'get'
+							})
 								.then(handleResponseStatusAndContentType)
 								.then(series => {
 									const seriesData = id => series.find(f => f.id === id)
@@ -98,22 +98,22 @@ export async function linedEvents(req, res, local) {
 									const festNames = festivals.reduce((names, fest) => {
 										names[fest.id] = `${seriesNames[fest.series]} ${fest.year}`
 										return names
-									} , {})
+									}, {})
 									const lineupObject = lineups.reduce((obj, lineup) => {
 										const fest = festNames[lineup.festival]
-										if(!fest) return obj
-										if(!obj[fest]) {
+										if (!fest) return obj
+										if (!obj[fest]) {
 											const festival = festData(lineup.festival)
 											const series = seriesData(festival.series)
 											obj[fest] = {
-												series, 
-												festival, 
-												headliners: [], 
+												series,
+												festival,
+												headliners: [],
 												allArtists: []
 											}
-										} 
+										}
 										obj[fest].allArtists.push(lineup)
-										if(lineup.priority === 1) obj[fest].headliners.push(lineup)
+										if (lineup.priority === 1) obj[fest].headliners.push(lineup)
 										return obj
 									}, {})
 									return lineupObject
@@ -127,14 +127,14 @@ export async function linedEvents(req, res, local) {
 						EX: 3600 * 24
 					})
 						.then(() => client.quit())
-					
+
 					return final
 				})
 				.then(data => !local && res.status(200).json(data) || data)
 				.catch(error => {
 					console.error('fg API call error')
-					console.error(error) 
-					if(!local) return res.status(500).send('No fg result')
+					console.error(error)
+					if (!local) return res.status(500).send('No fg result')
 					throw error;
 				});
 		})

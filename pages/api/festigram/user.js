@@ -1,6 +1,6 @@
 // pages/api/festigram/user.js
 
-import { getAccessToken, withApiAuthRequired } from '@auth0/nextjs-auth0';
+import { withApiAuthRequired } from '../../../services/auth-api';
 
 
 function handleResponseStatusAndContentType(response) {
@@ -19,13 +19,16 @@ function handleResponseStatusAndContentType(response) {
 export async function userProfile(req, res, local) {
   // If your Access Token is expired and you have a Refresh Token
   // `getAccessToken` will fetch you a new one using the `refresh_token` grant
+  console.log('userProfile local', req.auth)
+  return res.status(200).json(req.auth || {});
+  /*
   const { accessToken } = await getAccessToken(req, res, {
     scopes: ['openid', 'profile', 'email']
   });
   //console.log('local: ', local)
   //console.log('Recvd access token: ', accessToken)
-  if(!accessToken && !local) return res.status(200).send('Not Looged In')
-  if(!accessToken) throw new Error('Not Looged In')
+  if (!accessToken && !local) return res.status(200).send('Not Looged In')
+  if (!accessToken) throw new Error('Not Looged In')
   const response = await fetch('https://festigram.app/api/Profiles/getUserId', {
     headers: {
       Authorization: `Bearer ${accessToken}`
@@ -33,29 +36,30 @@ export async function userProfile(req, res, local) {
     method: 'post'
   });
   return handleResponseStatusAndContentType(response)
-  .then(id => {
-  	//console.log('handled response', id)
-  	if(!id || !id.id) throw new Error('malformed response')
-  	return id.id
-  })
-  .then(id => fetch('https://festigram.app/api/Profiles/' + id, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`
-    },
-    method: 'get'
-  }))
-  .then(handleResponseStatusAndContentType)
-  .then(user => {
+    .then(id => {
+      //console.log('handled response', id)
+      if (!id || !id.id) throw new Error('malformed response')
+      return id.id
+    })
+    .then(id => fetch('https://festigram.app/api/Profiles/' + id, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      },
+      method: 'get'
+    }))
+    .then(handleResponseStatusAndContentType)
+    .then(user => {
 
-  	//console.log('recovered userdata', user)
-  	return user
-  })
-  	.then(user => !local && res.status(200).json(user) || user)
-	.catch(error => {
-	  console.error('user.js error')
-	  console.error(error)
-	  !local && res.status(401).send('No user found')
-	  throw error;
-	});
+      //console.log('recovered userdata', user)
+      return user
+    })
+    .then(user => !local && res.status(200).json(user) || user)
+    .catch(error => {
+      console.error('user.js error')
+      console.error(error)
+      !local && res.status(401).send('No user found')
+      throw error;
+    });
+    */
 }
-export default withApiAuthRequired(userProfile);
+export default withApiAuthRequired(userProfile)

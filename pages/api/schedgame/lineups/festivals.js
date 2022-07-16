@@ -2,15 +2,15 @@
 import {
 	withApiAuthRequired,
 	getSession
-} from '@auth0/nextjs-auth0';
+} from '../../../../services/noauth';
 import {
 	executeQuery
 } from '../../../services/db'
 import {
 	get
 } from "../../../services/api"
-import {userProfile as festid} from "../festigram/user"
-import {linedEvents} from "../../festigram/lineup"
+import { userProfile as festid } from "../festigram/user"
+import { linedEvents } from "../../festigram/lineup"
 import React, {
 	useState
 } from 'react'
@@ -50,14 +50,14 @@ export default withApiAuthRequired(async function model(req, res, local) {
 
 	switch (method) {
 		case 'GET':
-			if(source !== 'festigram') {
+			if (source !== 'festigram') {
 
 				//console.log('get series params', vals)
 				const connString = 'SELECT * FROM `band_list` WHERE 1=1' + where
 				//console.log('get series sql', connString, vals)
 				return executeQuery({
-						params: vals,
-						query: connString
+					params: vals,
+					query: connString
 				})
 					.then(models => {
 
@@ -70,8 +70,8 @@ export default withApiAuthRequired(async function model(req, res, local) {
 						res.status(500).send('No models found')
 						return error;
 					});
-			} else if(festUser) {
-				
+			} else if (festUser) {
+
 			} else {
 				return res.status(403).send('Must be logged in')
 			}
@@ -93,9 +93,9 @@ export default withApiAuthRequired(async function model(req, res, local) {
 			}
 			const params = createParams(paramObject)
 			return executeQuery({
-					query,
-					params
-				})
+				query,
+				params
+			})
 				.then(([models, fields]) => {
 
 					//console.log('recovered modelsdata', models, params)

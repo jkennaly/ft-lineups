@@ -4,11 +4,21 @@ import Link from 'next/link'
 import Profile from '../components/Profile'
 import styles from '../styles/Home.module.css'
 import React, { useState, useEffect } from "react";
-import { useUser } from '@auth0/nextjs-auth0';
+import { useUser } from '../services/noauth';
 
 export default function Home() {
-	const { user } = useUser()
-	//console.log('index user', user)
+  /*
+  let user
+  console.log('index useUser', useUser)
+  try {
+
+    user = useUser().user
+  } catch (err) {
+    console.error('useUser failed')
+    console.error(err)
+  }
+  console.log('index user', user)
+  */
   return (
     <div className={styles.container}>
       <Head>
@@ -26,11 +36,9 @@ export default function Home() {
           Login to enter a festival lineup
         </p>
 
-        {user && <Link href="/lineup">Assign a lineup</Link>}
 
-        {!user && <a href="/api/auth/login" className={styles.card}>Login</a>}
 
-        {user && <a href="/api/auth/logout" className={styles.card}>Logout</a>}
+        <a href="/api/auth/login" className={styles.card}>Login</a>
 
         <Profile />
 

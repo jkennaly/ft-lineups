@@ -2,13 +2,13 @@
 
 import {
 	withApiAuthRequired
-} from '@auth0/nextjs-auth0';
+} from '../../../services/noauth';
 
 import fgAll from '../../../services/fg-get-all'
 
 const redis = require("redis");
 
-const client = redis.createClient({url: process.env.REDIS_URL});
+const client = redis.createClient({ url: process.env.REDIS_URL });
 
 /*
 client.connect()
