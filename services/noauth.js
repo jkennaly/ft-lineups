@@ -1,6 +1,5 @@
 
 import Core from '@0441design/auth-fg-browser'
-import { useRouter } from 'next/router'
 
 
 let authConfig = {}
@@ -148,11 +147,4 @@ function makeQuerablePromise(promise) {
     result.value = function () { return value; };
     result.reason = function () { return reason; };
     return result;
-}
-
-//from: https://stackoverflow.com/questions/53819864/how-to-async-await-in-react-render-function
-function delayed_render(async_fun, deps = []) {
-    const [output, setOutput] = useState()
-    useEffect(async () => setOutput(await async_fun()), deps)
-    return (output === undefined) ? null : output
 }

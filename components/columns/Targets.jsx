@@ -8,7 +8,6 @@ export default function Targets({ tiers, lineup }) {
     else pv[cv.priority] = [cv]
     return pv
   }, {})
-  console.log('props', tiers, lineup, lineupByTier)
   return (
     <div className="text-center">
       <ul>

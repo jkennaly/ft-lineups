@@ -1,5 +1,5 @@
 // services/fg-get-all.js
-
+import fetchT from '@0441design/fetch-timed'
 import {
 	getAccessToken
 } from './auth-api';

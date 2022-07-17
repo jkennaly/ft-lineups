@@ -18,21 +18,21 @@ import { fgLineups as linedEvents } from '../models/lists/lineups'
 */
 
 export default function CopyLineup() {
-	const [source, setSource] = useState("unselected")
-	const [fgEvents, setFgEvents] = useState([])
-	const [fsgEvents, setSgEvents] = useState([])
-	useEffect(() => {
-		const fetchEvents = async () => {
-			const response = await linedEvents()
-			//console.log('splash fetchSeries', response)
-			if(response) {
-				const sortedEvents = Object.keys(response)
-					.sort((a, b) => a.localeCompare(b))
-				setFgEvents(sortedEvents)
-			}
-		}
-	  fetchEvents()
-	}, []);
+  const [source, setSource] = useState("unselected")
+  const [fgEvents, setFgEvents] = useState([])
+  const [fsgEvents, setSgEvents] = useState([])
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const response = await linedEvents()
+      //console.log('splash fetchSeries', response)
+      if (response) {
+        const sortedEvents = Object.keys(response)
+          .sort((a, b) => a.localeCompare(b))
+        setFgEvents(sortedEvents)
+      }
+    }
+    fetchEvents()
+  }, []);
   return (
     <div className="bg-white shadow sm:rounded-lg">
       <div className="px-4 py-5 sm:p-6">
@@ -42,21 +42,21 @@ export default function CopyLineup() {
             <label htmlFor="source">
               Lineup Source
             </label>
-            <select 
-            	id="source" 
-            	name="source" 
-            	defaultValue="unselected"
-            	onChange={e => setSource(e.target.value)}
+            <select
+              id="source"
+              name="source"
+              defaultValue="unselected"
+              onChange={e => setSource(e.target.value)}
             >
-            	<option value="unselected">Choose...</option>
-            	<option value="festigram">Verifed Festival</option>
-            	<option value="schedgame">Your Festivals</option>
+              <option value="unselected">Choose...</option>
+              <option value="festigram">Verifed Festival</option>
+              <option value="schedgame">Your Festivals</option>
             </select>
             {source === 'festigram' && (<div>
-            	<label htmlFor="actual-festivals">Actual Festivals</label>
-            	<select name="actual-festivals" id="actual-festivals">
-            		{fgEvents.map(e => <option value={e}>{e}</option>)}
-            	</select>
+              <label htmlFor="actual-festivals">Actual Festivals</label>
+              <select name="actual-festivals" id="actual-festivals">
+                {fgEvents.map(e => <option key={e} value={e}>{e}</option>)}
+              </select>
 
             </div>)}
             {source === 'schedgame' && (<div>Your Festivals</div>)}

@@ -9,10 +9,7 @@ import { useUser, isAuthenticated } from '../services/noauth';
 export default function Profile() {
   //console.log('Starting Profile')
   // Store list of all users
-  const [user, setLogged] = useState();
-  useEffect(() => {
-    setLogged(useUser());
-  }, [isAuthenticated()]);
+  const user = useUser()
   //console.log('About to return from Profile', user)
   return (
     user && user.picture ? (
