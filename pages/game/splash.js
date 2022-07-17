@@ -8,7 +8,6 @@ import Header from '../../components/shell/Header'
 import styles from '../../styles/Home.module.css'
 import { currentFestival, events } from '../../services/active'
 import React, { useState, useEffect } from "react";
-import { } from './services/noauth';
 import { userSeries } from '../../models/lists/series'
 import { useUser, withPageAuthRequired } from '../../services/noauth'
 

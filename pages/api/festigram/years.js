@@ -2,13 +2,11 @@
 
 import {
 	withApiAuthRequired
-} from '../../../services/noauth';
+} from '../../../services/auth-api';
 
 import fgAll from '../../../services/fg-get-all'
 
-const redis = require("redis");
 
-const client = redis.createClient({ url: process.env.REDIS_URL });
 
 /*
 client.connect()

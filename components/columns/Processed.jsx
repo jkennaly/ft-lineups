@@ -37,7 +37,7 @@ export default function Processed({ lineupUrl, topRows = [], removeRow, appendWo
 			const response = await arachProcessed(line)
 
 			//console.log('splash fetchProcessedArach', response)
-			if (response.status === 'pending') { }
+			//if (response.status === 'pending') { }
 			if (response) setProcessed(response)
 		}
 		fetchProcessedArach()

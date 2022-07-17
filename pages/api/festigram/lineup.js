@@ -3,12 +3,18 @@
 import {
 	getAccessToken,
 	withApiAuthRequired
-} from '../../../services/noauth';
+} from '../../../services/auth-api';
 
 const redis = require("redis");
+import fetchT from '@0441design/fetch-timed'
 
 const client = redis.createClient({ url: process.env.REDIS_URL });
 
+client.on("error", function (error) {
+	if (error.code === 'SocketClosedUnexpectedlyError') return
+	console.error('lineup Redis connect error');
+	console.error(error);
+});
 /*
 client.connect()
 	.catch(err => {
@@ -16,10 +22,11 @@ client.connect()
 		console.error(err)
 	})
 */
-const apiUrl = 'https://festigram.app/api/'
-const fgUrl = apiUrl + 'Lineups?filter[where][deleted]=false'
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.festigram.app'
+const fgUrl = apiUrl + '/api/Lineups?filter[where][deleted]=false'
 const leKey = `linedEvent.${fgUrl}`
 function handleResponseStatusAndContentType(response) {
+	if (!response) return Promise.resolve([])
 	const contentType = response.headers.get('content-type');
 	//console.log('response contentType', contentType)
 
@@ -29,6 +36,7 @@ function handleResponseStatusAndContentType(response) {
 	else if (contentType.startsWith('application/json;')) return response.json();
 	else if (contentType.startsWith('text/plain;')) throw new Error(response.text());
 	else if (contentType.startsWith('text/html;')) throw new Error(response.text());
+	else if (contentType.startsWith('application/xml')) return response.text();
 	else throw new Error(`Unsupported response content-type: ${contentType}`);
 }
 
@@ -48,12 +56,16 @@ export async function linedEvents(req, res, local) {
 		})
 		.then(data => {
 			if (data) client.quit()
-			if (data) return !local && res.status(200).json(data) || data
+			if (data) return res.status(200).json(data)
 			console.log('Redis data not available, requesting form fg api')
-			return fetch(fgUrl, {
+			return fetchT(fgUrl, {
 				method: 'get'
 			})
 				.then(handleResponseStatusAndContentType)
+				.then(data => {
+					console.log('lineup data', fgUrl, data)
+					return data.map ? data : []
+				})
 				.then(lineups => {
 					const festIds = lineups
 						.map(x => x.festival)
@@ -67,10 +79,14 @@ export async function linedEvents(req, res, local) {
 					}
 					const festString = JSON.stringify(festFilter)
 					const festUrl = apiUrl + 'Festivals?filter=' + festString
-					return fetch(festUrl, {
+					return fetchT(festUrl, {
 						method: 'get'
 					})
 						.then(handleResponseStatusAndContentType)
+						.then(data => {
+							console.log('festivals data', fgUrl, data)
+							return data.map ? data : []
+						})
 						.then(festivals => {
 							const festData = id => festivals.find(f => f.id === id)
 							const seriesIds = festivals
@@ -85,10 +101,14 @@ export async function linedEvents(req, res, local) {
 							}
 							const seriesString = JSON.stringify(seriesFilter)
 							const seriesUrl = apiUrl + 'Series?filter=' + seriesString
-							return fetch(seriesUrl, {
+							return fetchT(seriesUrl, {
 								method: 'get'
 							})
 								.then(handleResponseStatusAndContentType)
+								.then(data => {
+									console.log('series data', fgUrl, data)
+									return data.map ? data : []
+								})
 								.then(series => {
 									const seriesData = id => series.find(f => f.id === id)
 									const seriesNames = series.reduce((names, series) => {
@@ -130,10 +150,11 @@ export async function linedEvents(req, res, local) {
 
 					return final
 				})
-				.then(data => !local && res.status(200).json(data) || data)
+				.then(data => res.status(200).json(data))
 				.catch(error => {
 					console.error('fg API call error')
 					console.error(error)
+
 					if (!local) return res.status(500).send('No fg result')
 					throw error;
 				});

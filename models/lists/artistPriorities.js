@@ -19,7 +19,7 @@ export function fgArtistPriorities(...ids) {
 	})
 		.then(artistPriorities => {
 			//console.log('artistData', artistPriorities)
-			artistPriorities = artistPriorities.length ? artistPriorities : []
+			artistPriorities = artistPriorities && artistPriorities.length ? artistPriorities : []
 			const cached = cache.get('fg-artist-priorities')
 			const cacheValid = cached && cached.length
 			const newCache = [...artistPriorities, ...(cacheValid ? cache : [])]

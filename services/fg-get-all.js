@@ -2,18 +2,17 @@
 
 import {
 	getAccessToken
-} from './noauth';
+} from './auth-api';
 
 const redis = require("redis");
 
 const client = redis.createClient({ url: process.env.REDIS_URL });
 
 
-const con = client.connect()
-	.catch(err => {
-		console.error('Redis connect error')
-		console.error(err)
-	})
+client.on("error", function (error) {
+	console.error('fg-get-all Redis connect error');
+	console.error(error);
+});
 
 
 function handleResponseStatusAndContentType(response) {
@@ -31,28 +30,27 @@ function handleResponseStatusAndContentType(response) {
 export default function fgGetAll(modelName) {
 
 
-	async function getAll(req, res, local) {
-
+	async function getAll(req, res, token) {
+		const local = false
+		if (token && typeof token !== 'string') throw new Error('token is not a string')
 		const {
 			query: {
 				filter
 			}
 		} = req
 		const qs = `?filter${filter ? '=' + filter : '[where][deleted]=false'}`
-		const apiUrl = 'https://festigram.app/api/'
-		const fgUrl = apiUrl + modelName + qs
+		const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.festigram.app'
+		const fgUrl = apiUrl + '/api/' + modelName + qs
+		//console.log('fg-get-all fgUrl', fgUrl)
 		const leKey = `fg-${modelName}.${fgUrl}`
 
-		const { accessToken } = await getAccessToken(req, res, {
-			scopes: ['openid', 'profile', 'email']
-		});
-		// If your Access Token is expired and you have a Refresh Token
-		// `getAccessToken` will fetch you a new one using the `refresh_token` grant
+		const accessToken = ''
 		//console.log('redis url', process.env.REDIS_URL)
 		const t0 = Date.now()
-		return con
+		const subscriber = client.duplicate()
+		return subscriber.connect()
 			//.then(() => console.log('redis connect', Date.now() - t0))
-			.then(() => client.get(leKey))
+			.then(() => subscriber.get(leKey))
 			//.then((data) => console.log('redis get', Date.now() - t0) || data)
 			//.then(raw => JSON.parse(raw))
 			.catch(err => {
@@ -61,18 +59,18 @@ export default function fgGetAll(modelName) {
 			})
 			.then(data => {
 				if (data) return !local && res.status(200).json(data) || data
-				console.log('Redis data not available, requesting form fg api')
-				return fetch(fgUrl, {
+				//console.log('Redis data not available, requesting form fg api')
+				return fetchT(fgUrl, {
 					headers: {
-						Authorization: `Bearer ${accessToken}`
+						//Authorization: `Bearer ${accessToken}`
 					},
 					method: 'get'
 				})
 					.then(handleResponseStatusAndContentType)
 					.then(final => {
-						//console.log('final response', final)
+						//console.log('final response', fgUrl, final)
 						//if(!id || !id.id) throw new Error('malformed response')
-						client.set(leKey, JSON.stringify(final), {
+						subscriber.set(leKey, JSON.stringify(final), {
 							EX: 3600 * 24
 						})
 
@@ -86,6 +84,7 @@ export default function fgGetAll(modelName) {
 						throw error;
 					});
 			})
+			.finally(() => subscriber.quit())
 	}
 	return getAll
 }

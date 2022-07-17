@@ -3,12 +3,16 @@
 import {
 	getAccessToken,
 	withApiAuthRequired
-} from '../../../services/noauth';
+} from '../../../services/auth-api';
 
 const redis = require("redis");
 
 const client = redis.createClient({ url: process.env.REDIS_URL });
 
+client.on("error", function (error) {
+	console.error('Artist Redis connect error');
+	console.error(error);
+});
 /*
 client.connect()
 	.catch(err => {
@@ -16,8 +20,8 @@ client.connect()
 		console.error(err)
 	})
 */
-const apiUrl = 'https://festigram.app/api/'
-const fgUrl = apiUrl + 'Artists'
+const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://api.festigram.app'
+const fgUrl = apiUrl + '/api/Artists'
 const aKey = `linedEvent.${fgUrl}`
 function handleResponseStatusAndContentType(response) {
 	const contentType = response.headers.get('content-type');

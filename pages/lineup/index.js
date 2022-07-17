@@ -12,14 +12,17 @@ import { fgLineups } from '../../models/lists/lineups'
 import { fgArtists } from '../../models/lists/artists'
 import { fgArtistAliases } from '../../models/lists/artistAliases'
 import { fgArtistPriorities as fgTiers } from '../../models/lists/artistPriorities'
-import { useUser, withPageAuthRequired } from '../../../services/noauth'
+import { useUser, withPageAuthRequired, isAuthenticated } from '../../services/noauth'
 
 
 
 const { getActive } = events
 
 export default withPageAuthRequired(function Home() {
-	const { user } = useUser()
+	const [logged, setLogged] = useState(false);
+	useEffect(() => {
+		setLogged(isAuthenticated());
+	}, [isAuthenticated()]);
 	const [series, setSeries] = useState([])
 	const [years, setYears] = useState([])
 	const [lineups, setLineups] = useState([])
@@ -32,6 +35,9 @@ export default withPageAuthRequired(function Home() {
 	useEffect(() => {
 		const fetchSeries = async () => {
 			const response = await fgSeries()
+			if (response && !response.filter) {
+				console.log('linep index', response)
+			}
 			if (response) setSeries(response.filter(s => !s.hiatus))
 		}
 		const fetchYears = async () => {
@@ -54,7 +60,7 @@ export default withPageAuthRequired(function Home() {
 			const response = await fgArtistAliases()
 			if (response) setArtistAliases(response)
 		}
-		if (user) {
+		if (logged) {
 			fetchSeries()
 			fetchYears()
 			fetchLineups()
@@ -62,7 +68,7 @@ export default withPageAuthRequired(function Home() {
 			fetchArtists()
 			fetchArtistAliases()
 		}
-	}, [user]);
+	}, [logged]);
 	//console.log('lineup', selectedYear)
 	const year = new Date().getFullYear()
 	const nextYear = year + 1

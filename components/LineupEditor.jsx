@@ -35,11 +35,11 @@ export default function LineupEditor({
 	}
 	const appendWord = word => setArtistName(artistName + ' ' + word)
 	const appendLineupEntry = newLineup => setCurrentLineup([...currentLineup, newLineup])
-	const activeSeries = series.find(s => s.id === selectedSeries)
-	const activeYear = years.find(y => y.id === selectedYear)
+	const activeSeries = typeof selectedSeries === 'string' ? { year: selectedSeries } : series.find(s => s.id === selectedSeries)
+	const activeYear = typeof selectedYear === 'string' ? { year: selectedYear } : years.find(y => y.id === selectedYear)
 	//console.log('lineups', lineups.find)
 	const apiLineup = lineups
-		.filter(y => y.year === selectedYear)
+		.filter(y => y && y.year === selectedYear)
 		.map(l => {
 			l.artist = artists.find(a => a.id === l.band)
 			return l

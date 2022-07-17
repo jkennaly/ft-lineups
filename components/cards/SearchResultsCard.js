@@ -26,7 +26,7 @@ export default function SearchResults({ artists, searchString, newSelection }) {
       preset: 'match',
       tokenize: 'full'
     })
-    artists.forEach(({ id, name }) => index.add(id, name));
+    artists && artists.forEach && artists.forEach(({ id, name }) => index.add(id, name));
   }, [artists])
   const findArtist = _.memoize(id => artists.find(a => a.id === id))
   return (

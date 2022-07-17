@@ -4,21 +4,14 @@ import Link from 'next/link'
 import Profile from '../components/Profile'
 import styles from '../styles/Home.module.css'
 import React, { useState, useEffect } from "react";
-import { useUser } from '../services/noauth';
+import { isAuthenticated } from '../services/noauth';
 
 export default function Home() {
-  /*
-  let user
-  console.log('index useUser', useUser)
-  try {
-
-    user = useUser().user
-  } catch (err) {
-    console.error('useUser failed')
-    console.error(err)
-  }
-  console.log('index user', user)
-  */
+  const [logged, setLogged] = useState(false);
+  useEffect(() => {
+    setLogged(isAuthenticated());
+  }, [isAuthenticated()]);
+  console.log('index user', logged)
   return (
     <div className={styles.container}>
       <Head>
@@ -36,9 +29,11 @@ export default function Home() {
           Login to enter a festival lineup
         </p>
 
+        {logged && <Link href="/lineup">Assign a lineup</Link>}
 
+        {!logged && <a href="/auth/login" className={styles.card}>Login</a>}
 
-        <a href="/api/auth/login" className={styles.card}>Login</a>
+        {logged && <a href="/auth/logout" className={styles.card}>Logout</a>}
 
         <Profile />
 

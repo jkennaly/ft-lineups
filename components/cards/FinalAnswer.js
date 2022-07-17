@@ -100,7 +100,7 @@ export default function FinalAnswer({ artist, tiers, newPriorityId, setArtist, u
                         onChange={e => newPriorityId(parseInt(e.target.value, 10))}
                         className="block w-full h-1/2 pl-3 pr-10 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
                     >
-                        {tiers && tiers.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
+                        {tiers && tiers.map && tiers.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
                     </select>
                 </div>
             </div>

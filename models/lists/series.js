@@ -51,7 +51,7 @@ export function fgSeries() {
 	})
 		.then(series => {
 			//console.log('lineupsData', lineups)
-			return series
+			return series && series.filter ? series : JSON.parse(series)
 		})
 		.catch(error => {
 			console.error('fgLineups error models/lists/series.js')

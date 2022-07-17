@@ -3,6 +3,7 @@ import { get, post } from "../../services/api"
 
 
 export function arachProcessed(lineupUrl) {
+	if (!lineupUrl.startsWith('http')) return
 	const qs = `lineupUrl=${lineupUrl}`
 	const url = `${process.env.NEXT_PUBLIC_ARACH_API_URL}${qs}`
 	return get(() => { }, {
