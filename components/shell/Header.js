@@ -171,7 +171,7 @@ export default function Header({ active }) {
                     height="35"
                     width="35"
                   />
-                </div>}
+                </div>
                 <div className="ml-3">
                   <div className="text-base font-medium text-white">{user.name}</div>
                   <div className="text-sm font-medium text-gray-400">{user.email}</div>
